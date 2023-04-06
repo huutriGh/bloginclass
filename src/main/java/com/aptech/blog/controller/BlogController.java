@@ -22,7 +22,7 @@ import com.aptech.blog.service.BlogService;
 
 @RestController
 
-@CrossOrigin("http://localhost:3001")
+@CrossOrigin("http://localhost:3000")
 public class BlogController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class BlogController {
 
     }
 
-    @DeleteMapping(path = "/blogs/delete")
+    @PostMapping(path = "/blogs/delete")
     public ResponseEntity<String> deleteBlog(@RequestBody Blog blog) {
 
         service.deleteBlog(blog);
@@ -60,7 +60,7 @@ public class BlogController {
 
     @GetMapping(path = "/Blogs/{id}")
     public ResponseEntity<Optional<Blog>> getBlogById(@PathVariable int id) {
-        
+
         return new ResponseEntity<Optional<Blog>>(service.getBlogById(id), HttpStatus.OK);
     }
 
