@@ -22,7 +22,7 @@ import com.aptech.blog.service.BlogService;
 
 @RestController
 
-@CrossOrigin("http://localhost:3000")
+
 public class BlogController {
 
     @Autowired
@@ -45,7 +45,7 @@ public class BlogController {
 
     }
 
-    @PostMapping(path = "/blogs/delete")
+    @DeleteMapping(path = "/blogs/delete")
     public ResponseEntity<String> deleteBlog(@RequestBody Blog blog) {
 
         service.deleteBlog(blog);
