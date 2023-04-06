@@ -47,7 +47,7 @@ public class SecurityConfiguration {
                 .disable().authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
                         .anyRequest().authenticated())
-                .httpBasic();
+                .formLogin().defaultSuccessUrl("/blogs");
 
         return http.build();
     }
