@@ -35,11 +35,11 @@ public class BlogController {
 
     }
 
-    @PostMapping(path = "/blogs/add")
-    public ResponseEntity<String> addBlog(@RequestBody Blog blog) {
+    @PostMapping(path = "/blogs/add", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Blog> addBlog(@RequestBody Blog blog) {
 
-        service.addBlog(blog);
-        return new ResponseEntity<>("Add blog success.", HttpStatus.CREATED);
+        Blog newblog = service.addBlog(blog);
+        return new ResponseEntity<>(newblog, HttpStatus.CREATED);
 
     }
 
@@ -51,9 +51,9 @@ public class BlogController {
     }
 
     @PutMapping(path = "/blogs/update")
-    public ResponseEntity<String> updateBlog(@RequestBody Blog blog) {
-        service.updateBlog(blog);
-        return new ResponseEntity<>("Update blog success.", HttpStatus.OK);
+    public ResponseEntity<Blog> updateBlog(@RequestBody Blog blog) {
+       Blog newBlog =  service.updateBlog(blog);
+        return new ResponseEntity<>(newBlog, HttpStatus.OK);
     }
 
     @GetMapping(path = "/Blogs/{id}")
