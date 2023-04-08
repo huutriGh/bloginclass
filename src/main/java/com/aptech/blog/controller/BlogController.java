@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,8 +20,6 @@ import com.aptech.blog.model.Blog;
 import com.aptech.blog.service.BlogService;
 
 @RestController
-
-@CrossOrigin("http://localhost:3000")
 public class BlogController {
 
     @Autowired
@@ -37,11 +34,9 @@ public class BlogController {
 
     }
 
-    @PostMapping(path = "/blogs/add")
-    public ResponseEntity<String> addBlog(@RequestBody Blog blog) {
-
-        service.addBlog(blog);
-        return new ResponseEntity<>("Add blog success.", HttpStatus.CREATED);
+    @PostMapping(path = "/blogs/add", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Blog> addBlog(@RequestBody Blog blog) {
+        return new ResponseEntity<>(service.addBlog(blog), HttpStatus.CREATED);
 
     }
 
@@ -52,10 +47,10 @@ public class BlogController {
         return new ResponseEntity<>("Delete blog success.", HttpStatus.OK);
     }
 
-    @PutMapping(path = "/blogs/update")
-    public ResponseEntity<String> updateBlog(@RequestBody Blog blog) {
-        service.updateBlog(blog);
-        return new ResponseEntity<>("Update blog success.", HttpStatus.OK);
+    @PutMapping(path = "/blogs/update", produces = { MediaType.APPLICATION_JSON_VALUE })
+    public ResponseEntity<Blog> updateBlog(@RequestBody Blog blog) {
+
+        return new ResponseEntity<>(service.updateBlog(blog), HttpStatus.OK);
     }
 
     @GetMapping(path = "/Blogs/{id}")

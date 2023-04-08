@@ -28,15 +28,15 @@ public class BlogService {
         return repository.findById(id);
     }
 
-    public boolean addBlog(Blog blog) {
-        repository.save(blog);
-        return true;
+    public Blog addBlog(Blog blog) {
+        return repository.save(blog);
+
     }
 
-    public boolean updateBlog(Blog blog) {
+    public Blog updateBlog(Blog blog) {
 
-        repository.save(blog);
-        return true;
+      return  repository.save(blog);
+      
     }
 
     public boolean deleteBlog(Blog blog) {
