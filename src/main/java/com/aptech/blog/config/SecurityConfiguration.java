@@ -35,7 +35,8 @@ public class SecurityConfiguration {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/**"
 
     };
 
@@ -46,8 +47,8 @@ public class SecurityConfiguration {
                 .cors(withDefaults()).csrf()
                 .disable().authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated())
-                .formLogin().defaultSuccessUrl("/blogs");
+                        .anyRequest().authenticated());
+                // .formLogin().defaultSuccessUrl("/blogs");
 
         return http.build();
     }
