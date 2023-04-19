@@ -31,7 +31,7 @@ public class SecurityConfiguration {
 
     public static final String[] ENDPOINTS_WHITELIST = {
 
-            "/v2/api-docs/**",
+        //     "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
