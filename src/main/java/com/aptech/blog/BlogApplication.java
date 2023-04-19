@@ -2,11 +2,17 @@ package com.aptech.blog;
 
 import java.util.Random;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import com.aptech.blog.model.Blog;
+import com.aptech.blog.model.Role;
+import com.aptech.blog.model.UserRoles;
 import com.aptech.blog.repository.BlogRepository;
+import com.aptech.blog.repository.RoleRepository;
+import com.aptech.blog.repository.UserRepository;
 
 @SpringBootApplication
 
@@ -27,6 +33,26 @@ public class BlogApplication {
 		// repository.save(blog);
 		// }
 
+	}
+	@Bean
+	CommandLineRunner init(RoleRepository roleRepository, UserRepository userRepository) {
+		return args -> {
+			// Create Admin and Passenger Roles
+			Role adminRole = roleRepository.findByRole(UserRoles.ADMIN);
+			if (adminRole == null) {
+				adminRole = new Role();
+				adminRole.setRole(UserRoles.ADMIN);
+				roleRepository.save(adminRole);
+			}
+
+			Role userRole = roleRepository.findByRole(UserRoles.USER);
+			if (userRole == null) {
+				userRole = new Role();
+				userRole.setRole(UserRoles.USER);
+				roleRepository.save(userRole);
+			}
+
+		};
 	}
 
 }
