@@ -28,7 +28,11 @@ public class BlogService {
         return repository.findById(id);
     }
 
-    public boolean addBlog(Blog blog) {
+    public boolean addBlog(Blog blog) throws Exception {
+
+        if (repository.existsById(blog.getBlogId())) {
+            throw new Exception("Blog is exist !!!");
+        }
         repository.save(blog);
         return true;
     }
