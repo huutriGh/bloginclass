@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.aptech.blog.model.Blog;
+import com.aptech.blog.model.Post;
 import com.aptech.blog.model.Role;
 import com.aptech.blog.model.UserRole;
 import com.aptech.blog.repository.BlogRepository;
@@ -31,6 +32,10 @@ public class BlogApplication {
 			blog.setBlogId(i).setTitle("Title " + i)
 					.setUrl("http://localhost:8080/blog/" + i)
 					.setRating(rating);
+
+			Post post = new Post().setTitle("Post " + 1)
+			.setContents("Contents " + 1).setBlog(blog);
+			blog.getPost().add(post);
 			repository.save(blog);
 		}
 
