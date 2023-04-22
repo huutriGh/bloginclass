@@ -1,19 +1,14 @@
 package com.aptech.blog;
 
-import java.util.Random;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import com.aptech.blog.model.Blog;
-import com.aptech.blog.repository.BlogRepository;
 
 @SpringBootApplication
 
 public class BlogApplication {
 
 	public static void main(String[] args) {
-	 var context =	SpringApplication.run(BlogApplication.class, args);
+		var context = SpringApplication.run(BlogApplication.class, args);
 
 		// BlogRepository repository = context.getBean(BlogRepository.class);
 		// Random random = new Random();
