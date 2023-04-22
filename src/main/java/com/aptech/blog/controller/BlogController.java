@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +26,7 @@ public class BlogController {
     @Autowired
     private BlogService service;
 
+    // @Operation(security = { @SecurityRequirement(name = "bearer-key") })
     @GetMapping(path = "/blogs", produces = { MediaType.APPLICATION_JSON_VALUE })
     public ResponseEntity<Page<Blog>> getBlogs(
             @RequestParam(defaultValue = "${paging.pageNo}") int pageNo,
@@ -43,10 +43,9 @@ public class BlogController {
             service.addBlog(blog);
             return new ResponseEntity<>("Add blog success.", HttpStatus.CREATED);
         } catch (Exception e) {
-           
+
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-       
 
     }
 

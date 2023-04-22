@@ -3,12 +3,14 @@ package com.aptech.blog.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.aptech.blog.dto.LoginDto;
+import com.aptech.blog.dto.LoginRequest;
 import com.aptech.blog.dto.RoleDto;
 import com.aptech.blog.dto.UserDto;
 import com.aptech.blog.model.Role;
@@ -28,11 +30,14 @@ public class UserServiceImpl implements UserService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     @Override
     public UserDto signup(UserDto userDto) {
 
         Role userRole;
-        User user = userRepository.findByEmail(userDto.getEmail());
+        User user = userRepository.findByEmail(userDto.getEmail()).get();
         if (user == null) {
             if (userDto.isAdmin()) {
                 userRole = roleRepository.findByRole(UserRole.ADMIN);
@@ -56,12 +61,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserByEmail(String email) {
 
-        throw new UnsupportedOperationException("Unimplemented method 'findUserByEmail'");
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email).get());
+        if (user.isPresent()) {
+            return modelMapper.map((user.get()), UserDto.class);
+
+        }
+
+        return null;
+
     }
 
     @Override
-    public UserDto login(LoginDto loginDto) {
-        User user = userRepository.findByEmail(loginDto.getEmail());
+    public UserDto login(LoginRequest loginDto) {
+        User user = userRepository.findByEmail(loginDto.getEmail()).get();
         UserDto userDto = new UserDto();
         if (user != null) {
             Boolean checkPass = passwordEncoder.matches(loginDto.getPassword(), user.getPassword());

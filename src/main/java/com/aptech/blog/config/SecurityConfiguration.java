@@ -7,7 +7,9 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,39 +18,65 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.aptech.blog.utils.JwtUtils;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
 
+
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth,
+    JwtUtils jwtUtils;
+   
+
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth, CustomUserDetailService customUserDetailsService,
             PasswordEncoder passwordEncoder) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("user")
-                .password(passwordEncoder.encode("password"))
-                .roles("USER");
+        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder);
     }
 
     public static final String[] ENDPOINTS_WHITELIST = {
 
-        //     "/v2/api-docs/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/swagger-ui/**",
             "/swagger-ui.html",
-            "/**"
+            "/auth/login",
+            "/auth/signup",
+            "/auth/refreshtoken",
+
 
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
+
+    
+   
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager)
+            throws Exception {
         http
                 // by default uses a Bean by the name of corsConfigurationSource
-                .cors(withDefaults()).csrf()
-                .disable().authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                        .anyRequest().authenticated());
-                // .formLogin().defaultSuccessUrl("/blogs");
+                .cors(withDefaults()).csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> {
+                    try {
+                        authorize
+                                .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
+                                .anyRequest().authenticated().and().exceptionHandling(handling -> handling
+                                        .authenticationEntryPoint(
+                                                (req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
+                                .addFilter(new JwtAuthenticationFilter(authenticationManager,jwtUtils))
+                                .addFilter(new JwtAuthorizationFilter(authenticationManager));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                });
 
         return http.build();
     }
@@ -64,4 +92,5 @@ public class SecurityConfiguration {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
