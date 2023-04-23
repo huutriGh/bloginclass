@@ -1,5 +1,6 @@
 package com.aptech.blog.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_role")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @Column(name="role_id")

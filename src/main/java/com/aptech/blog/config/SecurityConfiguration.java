@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -44,6 +45,7 @@ public class SecurityConfiguration {
             "/auth/login",
             "/auth/signup",
             "/auth/refreshtoken",
+            "/**"
 
     };
 
@@ -70,7 +72,8 @@ public class SecurityConfiguration {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                });
+                }).sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         return http.build();
     }

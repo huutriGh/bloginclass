@@ -1,7 +1,10 @@
 package com.aptech.blog.model;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,7 +28,7 @@ import lombok.experimental.Accessors;
 @Entity
 @Table(name = "tbl_user")
 
-public class User {
+public class User implements Serializable {
 
     @Id
     @Column(name = "user_id")
@@ -50,5 +54,7 @@ public class User {
     @JoinTable(name = "tbl_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     private List<Role> roles;
+
+
 
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.aptech.blog.model.Blog;
+import com.aptech.blog.model.Post;
 import com.aptech.blog.model.Role;
 import com.aptech.blog.model.UserRole;
 import com.aptech.blog.repository.BlogRepository;
@@ -27,6 +28,7 @@ public class BlogApplication {
 		var context = SpringApplication.run(BlogApplication.class, args);
 
 		BlogRepository repository = context.getBean(BlogRepository.class);
+		
 		Random random = new Random();
 
 		for (int i = 1; i <= 1000; i++) {
@@ -35,6 +37,10 @@ public class BlogApplication {
 			blog.setBlogId(i).setTitle("Title " + i)
 					.setUrl("http://localhost:8080/blog/" + i)
 					.setRating(rating);
+
+		    Post post = new Post().setContents("Post " + 1).setBlog(blog);
+			blog.getPosts().add(post);
+			
 			repository.save(blog);
 		}
 

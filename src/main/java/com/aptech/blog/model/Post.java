@@ -1,17 +1,17 @@
 package com.aptech.blog.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,22 +20,19 @@ import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@Accessors(chain = true)
 @NoArgsConstructor
 @AllArgsConstructor
-
+@Accessors(chain = true)
 @Entity
-public class Blog implements Serializable {
-    
+public class Post implements Serializable {
     @Id
-    private int blogId;
-    private String title;
-    private String url;
-    private int rating;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
+    private String contents;
 
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "blog")
-    @JsonManagedReference
-    private List<Post> posts = new ArrayList<>();
-
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "BlogId")
+    @JsonBackReference
+    private Blog blog;
 }
