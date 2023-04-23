@@ -26,10 +26,8 @@ import jakarta.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-
     @Autowired
     JwtUtils jwtUtils;
-   
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth, CustomUserDetailService customUserDetailsService,
@@ -47,16 +45,12 @@ public class SecurityConfiguration {
             "/auth/signup",
             "/auth/refreshtoken",
 
-
     };
 
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
-    
-   
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationManager authenticationManager)
@@ -71,7 +65,7 @@ public class SecurityConfiguration {
                                 .anyRequest().authenticated().and().exceptionHandling(handling -> handling
                                         .authenticationEntryPoint(
                                                 (req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED)))
-                                .addFilter(new JwtAuthenticationFilter(authenticationManager,jwtUtils))
+                                .addFilter(new JwtAuthenticationFilter(authenticationManager, jwtUtils))
                                 .addFilter(new JwtAuthorizationFilter(authenticationManager));
                     } catch (Exception e) {
                         e.printStackTrace();

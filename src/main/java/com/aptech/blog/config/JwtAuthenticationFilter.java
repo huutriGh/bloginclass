@@ -10,7 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import com.aptech.blog.model.User;
+import com.aptech.blog.dto.LoginRequest;
 import com.aptech.blog.utils.JwtUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private JwtUtils jwtUtils;
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager,JwtUtils jwtUtils) {
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.jwtUtils = jwtUtils;
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/auth/login", "POST"));
@@ -35,9 +35,10 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             throws AuthenticationException {
         try {
 
-            User user = new ObjectMapper().readValue(req.getInputStream(), User.class);
+            LoginRequest user = new ObjectMapper().readValue(req.getInputStream(), LoginRequest.class);
             return authenticationManager.authenticate(
-                    (new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword(), new ArrayList<>())));
+                    (new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(),
+                            new ArrayList<>())));
 
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

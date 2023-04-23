@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto login(LoginRequest loginDto) {
-        User user = userRepository.findByEmail(loginDto.getEmail()).get();
+        User user = userRepository.findByEmail(loginDto.getUsername()).get();
         UserDto userDto = new UserDto();
         if (user != null) {
             Boolean checkPass = passwordEncoder.matches(loginDto.getPassword(), user.getPassword());
