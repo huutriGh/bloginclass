@@ -37,21 +37,21 @@ public class UserServiceImpl implements UserService {
     public UserDto signup(UserDto userDto) {
 
         Role userRole;
-        User user = userRepository.findByEmail(userDto.getEmail()).get();
-        if (user == null) {
+        Optional<User> user = userRepository.findByEmail(userDto.getEmail());
+        if (!user.isPresent()) {
             if (userDto.isAdmin()) {
                 userRole = roleRepository.findByRole(UserRole.ADMIN);
             } else {
                 userRole = roleRepository.findByRole(UserRole.USER);
             }
 
-            user = new User().setEmail(userDto.getEmail())
+            User newuser = new User().setEmail(userDto.getEmail())
                     .setPassword(passwordEncoder.encode(userDto.getPassword()))
                     .setRoles(Arrays.asList(userRole))
                     .setFirstName(userDto.getFirstName())
                     .setLastName(userDto.getLastName())
                     .setMobileNumber(userDto.getMobileNumber());
-            userRepository.save(user);
+            userRepository.save(newuser);
             userDto.setPassword("");
 
         }
@@ -96,6 +96,11 @@ public class UserServiceImpl implements UserService {
 
         return userDto;
 
+    }
+
+    @Override
+    public List<User> getAllUser() {
+        return (List<User>) userRepository.findAll();
     }
 
 }

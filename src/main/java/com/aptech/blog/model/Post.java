@@ -31,7 +31,7 @@ public class Post implements Serializable {
 
     private String contents;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "BlogId")
     @JsonBackReference
     private Blog blog;

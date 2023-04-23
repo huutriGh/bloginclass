@@ -26,15 +26,14 @@ import lombok.experimental.Accessors;
 
 @Entity
 public class Blog implements Serializable {
-    
+
     @Id
     private int blogId;
     private String title;
     private String url;
     private int rating;
 
-
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "blog")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "blog")
     @JsonManagedReference
     private List<Post> posts = new ArrayList<>();
 

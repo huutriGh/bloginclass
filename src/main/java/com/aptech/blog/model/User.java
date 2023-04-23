@@ -4,6 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,11 +53,10 @@ public class User implements Serializable {
     @Column(name = "Mobile_Number")
     private String mobileNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
-    private List<Role> roles;
-
-
+    @JsonManagedReference
+    private List<Role> roles = new ArrayList<>();
 
 }

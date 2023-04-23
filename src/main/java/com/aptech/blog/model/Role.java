@@ -4,10 +4,13 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,14 +30,15 @@ import lombok.experimental.Accessors;
 public class Role implements Serializable {
 
     @Id
-    @Column(name="role_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY )
+    @Column(name = "role_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    @JsonBackReference
     private List<User> users = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private UserRole role;
-    
+
 }
