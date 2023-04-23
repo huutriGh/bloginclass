@@ -22,7 +22,6 @@ import com.aptech.blog.service.BlogService;
 
 @RestController
 
-@CrossOrigin("http://localhost:3000")
 public class BlogController {
 
     @Autowired
@@ -40,12 +39,18 @@ public class BlogController {
     @PostMapping(path = "/blogs/add")
     public ResponseEntity<String> addBlog(@RequestBody Blog blog) {
 
-        service.addBlog(blog);
-        return new ResponseEntity<>("Add blog success.", HttpStatus.CREATED);
+        try {
+            service.addBlog(blog);
+            return new ResponseEntity<>("Add blog success.", HttpStatus.CREATED);
+        } catch (Exception e) {
+           
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+       
 
     }
 
-    @PostMapping(path = "/blogs/delete")
+    @DeleteMapping(path = "/blogs/delete")
     public ResponseEntity<String> deleteBlog(@RequestBody Blog blog) {
 
         service.deleteBlog(blog);
