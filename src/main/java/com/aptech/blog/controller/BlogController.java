@@ -83,38 +83,37 @@ public class BlogController {
         return new ResponseEntity<Blog>(blog.get(), HttpStatus.OK);
     }
 
-    /*
-    @PostMapping(path = "/Blogs/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files) {
-        Path root = Paths.get("uploads");
-        try {
-            Files.createDirectories(root);
-            for (MultipartFile file : files) {
-                System.out.println(file.getOriginalFilename());
-                Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()));
-            }
-            return new ResponseEntity<>("Upload file success.", HttpStatus.OK);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
+    
+    // @PostMapping(path = "/Blogs/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    // public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files) {
+    //     Path root = Paths.get("uploads");
+    //     try {
+    //         Files.createDirectories(root);
+    //         for (MultipartFile file : files) {
+    //             System.out.println(file.getOriginalFilename());
+    //             Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()));
+    //         }
+    //         return new ResponseEntity<>("Upload file success.", HttpStatus.OK);
+    //     } catch (IOException e) {
+    //         throw new RuntimeException("Could not initialize folder for upload!");
 
-        }
+    //     }
 
-    }
+    // }
 
-    @PostMapping(path = "/Blogs/download")
-    public ResponseEntity<Resource> download(@RequestParam String fileName) throws MalformedURLException {
-        Path root = Paths.get("uploads" + File.separator + fileName);
-        Resource file = new UrlResource(root.toUri());
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(file);
+    // @PostMapping(path = "/Blogs/download")
+    // public ResponseEntity<Resource> download(@RequestParam String fileName) throws MalformedURLException {
+    //     Path root = Paths.get("uploads" + File.separator + fileName);
+    //     Resource file = new UrlResource(root.toUri());
+    //     return ResponseEntity.ok()
+    //             .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"")
+    //             .contentType(MediaType.APPLICATION_OCTET_STREAM)
+    //             .body(file);
 
-    }
-    */
-     @PostMapping(path = "/Blogs/upload", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files,
-            @RequestPart("blogId") int blogId) {
+    // }
+    
+     @PostMapping(path = "/Blogs/upload/{blogId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files, @PathVariable int blogId) {
         Path root = Paths.get("uploads" + File.separator + blogId);
         try {
             Files.createDirectories(root);
