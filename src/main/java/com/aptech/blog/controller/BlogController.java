@@ -113,7 +113,7 @@ public class BlogController {
     // }
     
      @PostMapping(path = "/Blogs/upload/{blogId}", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files, @PathVariable int blogId) {
+    public ResponseEntity<String> upload(@RequestPart("files") MultipartFile[] files, @RequestPart("category") String category, @PathVariable int blogId) {
         Path root = Paths.get("uploads" + File.separator + blogId);
         try {
             Files.createDirectories(root);

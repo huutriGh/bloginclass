@@ -53,7 +53,7 @@ public class User implements Serializable {
     @Column(name = "Mobile_Number")
     private String mobileNumber;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
             @JoinColumn(name = "role_id") })
     @JsonManagedReference
